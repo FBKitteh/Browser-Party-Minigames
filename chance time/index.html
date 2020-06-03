@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chance Time</title>
+</head>
+<style>
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    background-color: honeydew;
+}
+
+main, article {
+    position: fixed;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 50vw;
+    height: 25vw;
+    border-radius: 2vw;
+    background-color: darkslategray;
+    display: grid;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: chocolate;
+    font-size: 4em;
+    user-select: none;
+    grid-template-columns: auto auto auto;
+    column-gap: 2.5vw;
+
+}
+
+header {
+    height: 13vw;
+    width: 13vw;
+    background-color: floralwhite;
+    position: relative;
+    overflow: hidden;
+    border-radius: .5vw;
+}
+
+span {
+    display: block;
+    position: absolute;
+    margin: auto;
+    font-size: 6vw;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    line-height: 200%;
+    transition: all 0s;
+    /* transition: all .1s linear; */
+}
+
+.teleport-slot {
+    transition: none;
+    top: 0;
+}
+</style>
+<body>
+    <main>
+        <section>
+            <header>
+                <span id="slot1">
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                </span>
+            </header>
+        </section>
+        <section>
+            <header>
+                <span id="slot2">
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                </span>
+            </header>
+        </section>
+        <section>
+            <header>
+                <span id="slot3">
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                    🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>🍒<br>💰<br>❓<br>🍍<br>💱<br>☠<br>
+                </span>
+            </header>
+        </section>
+    </main>
+</body>
+<script>
+    class Slot {
+        constructor(id = "") {
+            this.element = document.getElementById(id)
+            this.pos = getRandomInt(5)
+            this.start = getRandomInt(5)
+            this.score = Math.abs(this.pos - this.start)
+            this.init(this.start)
+            this.setPos(this.pos, this.start)
+        }
+        async init(num = NaN) {
+            await this.moveSlot(num)
+        }
+        async setPos(num = NaN, start = NaN) {
+            await sleep(100)
+            await this.moveSlot((4*5) + num - start)
+        }
+        async moveSlot(num = NaN) {
+            this.element.style.transitionDuration = num * 100 + "ms"
+            this.element.style.top = num * slot_offset + "vw"
+            await sleep(num * 100)
+        }
+    }
+</script>
+<script>
+const slot_offset = -11.975 // -11.5
+
+const slot1 = new Slot("slot1")
+const slot2 = new Slot("slot2")
+const slot3 = new Slot("slot3")
+
+start()
+
+async function start() {
+    console.log("score: ", slot1.score, slot2.score, slot3.score)
+    
+}
+
+
+
+
+function getRandomInt(max, min = 0) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+</script>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cookey Clickr</title>
+</head>
+<style>
+body {
+    height: 100vh;
+    width: 100vw;
+    margin: 0;
+    background-color: peachpuff;
+}
+
+main, article {
+    position: fixed;
+    margin: auto;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 40vw;
+    height: 40vw;
+    border-radius: 40vw;
+    background-color: #342417;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    color: chocolate;
+    font-size: 4em;
+    user-select: none;
+}
+
+main:hover, article:hover {
+    animation: hover .4s infinite;
+}
+
+header {
+    position: fixed;
+    margin: auto;
+    top: 2vw;
+    left: 2vw;
+    border-radius: 8vw;
+    background-color: cornflowerblue;
+    font-size: 2em;
+    padding: .2em .5em;
+}
+
+article {
+    background-color: #34241788;
+    transition: .1s;
+    transform: scale(1);
+}
+
+article.animate {
+    transform: scale(1.1);
+}
+
+@keyframes hover {
+  0%   {transform: scale(1);}
+  50%  {transform: scale(1.05);}
+  100% {transform: scale(1);}
+}
+</style>
+<body>
+    <header onclick="clear_cookey()">Clear</header>
+
+    <article id="yoseph"></article>
+
+    <main onclick="click_cookey()" id="yammaroo"></main>
+    
+</body>
+<script>
+    let clicks = parseInt(localStorage.getItem("clicks"))
+    if (!clicks) clicks = 0
+    const main_element = document.getElementById("yammaroo")
+    const article_element = document.getElementById("yoseph")
+    main_element.innerText = clicks
+    
+
+    async function click_cookey() {
+        clicks++
+        main_element.innerText = clicks
+        localStorage.setItem("clicks", clicks)
+        article_element.classList.add("animate")
+        await sleep(100)
+        article_element.classList.remove("animate")
+        
+
+    }
+
+    function clear_cookey() {
+        clicks = 0
+        main_element.innerText = clicks
+        localStorage.setItem("clicks", clicks)
+    }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+</script>
+</html>
