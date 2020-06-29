@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>kool mewsic</title>
+</head>
+<style>
+    body {
+        margin: 0;
+        padding: 8vh 6vw;
+        color: #f4f4f4;
+        font-family: -apple-system, Helvetica, 'Segoe UI', 
+            Roboto, Oxygen, Ubuntu, Cantarell, 
+            'Open Sans', 'Helvetica Neue', sans-serif;
+    }
+    h2,h3,h4,h5,p {
+        margin: 0;
+    }
+    small {
+        display: block;
+        font-size: .5em;
+    }
+    button {
+        transition: background .5s;
+    }
+    button:hover {
+        background: white !important;
+    }
+    #bg {
+        position: absolute;
+        z-index: -20;
+        top: 0; left: 0;
+        width: 100vw;
+        height: 100vh;
+
+        /* color: chocolate;
+        color: crimson; */
+        background: linear-gradient(45deg, crimson, chocolate);
+    }
+    .headr {
+        display: grid;
+        grid-template-columns: auto 3em 1fr;
+        column-gap: 2em;
+    }
+    .headr button {
+        border: none;
+        border-radius: 1em;
+        font-size: 2em;
+        height: 1.5em;
+        margin: auto 0;
+        background: #fffb;
+    }
+
+    .song { 
+        background: #000b;
+        color: white;
+        padding: .4em 1em;
+        border-radius: .3em;
+        margin-bottom: 2vh;
+
+        display: grid;
+        grid-template-columns: auto 4em;
+        
+    }
+    .song * {
+        font-weight: 400 !important;
+    }
+    .song h4 {
+        opacity: .7;
+    }
+    .song p {
+        opacity: .7;
+        text-align: right;
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #0008;
+        backdrop-filter: blur(2em);
+        z-index: 10;
+        font-size: 1.5em;
+
+        transform: translateY(100vh);
+        transition: transform 1s;
+    }
+    .modal h2 {
+        margin-left: 0.6em;
+    }
+    .modal input, .modal button {
+        border: none;
+        padding: .25em .5em;
+        border-radius: .3em;
+        font-size: 0.85em;
+        width: 26vw;
+        margin: .3em 1em;
+        box-sizing: border-box;
+    }
+
+    .center-flex {
+        display: flex;
+    }
+    .center-flex > div {
+        margin: auto;
+    }
+
+    .no-transform {
+        transform: none !important;
+    }
+</style>
+<body>
+    <div id="bg"></div>
+
+    <div class="headr">
+        <h1>
+            Super Music
+            <small>
+                Awesome Things
+            </small>
+        </h1>
+        <button onclick="toggleSongBox()">+</button>
+        <div></div>
+    </div>
+
+    <div style="height: 10vh;"></div>
+    
+    <div class="song" style="display: none;">
+        <h3>Title</h3>
+        <p>Year</p>
+        <h4>Artist &ensp; &bull; &ensp; Album</h4>
+    </div>
+
+    <aside class="center-flex modal" id="add_song_box">
+        <div>
+                
+            <h2>
+                Add song
+                <small>
+                    Awesome song
+                </small>
+            </h2>
+            
+            <div style="height: 10vh;"></div>
+
+            <input type="text" placeholder="Title" id="song-title">
+            <input type="text" placeholder="Artist" id="song-artist">
+            <br>
+            <input type="text" placeholder="Album" id="song-album">
+            <input type="number" placeholder="Year" id="song-year">
+            <br>
+            <button style="background: crimson;" onclick="toggleSongBox()">Cancel</button>
+            <button style="background: darkgreen;" onclick="addSongInstance()">Confirm</button>
+        </div>
+    </aside>
+</body>
+<script>
+class Song {
+    constructor (album = "", year = NaN, artist = "", title = "") {
+        this.album = album
+        this.year = year
+        this.artist = artist
+        this.title = title
+
+        this.appendHTML()
+    }
+    shortYear() {
+        let short = this.year + ""
+        return short.slice(-2)
+    }
+    appendHTML() {
+        let div = document.createElement("div")
+        document.body.appendChild(div)
+        div.className = "song"
+        div.innerHTML = `
+            <h3>${this.title}</h3>
+            <p>'${this.shortYear()}</p>
+            <h4>${this.artist} &ensp; &bull; &ensp; ${this.album}</h4>
+        `
+    }
+}
+
+let default_songs = [
+    new Song("Danger Days: The True Lives of the Fabulous Killjoys", 2010,"My Chemical Romance","Na Na Na (Na Na Na Na Na Na Na Na Na)"),
+    new Song("Danger Days: The True Lives of the Fabulous Killjoys", 2010,"My Chemical Romance", "SING"),
+    new Song("American Idiot", 2004,"Green Day","Too Much Too Soon"),
+    new Song("Misadventures", 2016,"Pierce The Veil","Song For Isabelle"),
+    new Song("Enema Of The State", 1999,"blink-182","What's My Age Again?")
+]
+
+let added_songs = []
+added_songs = JSON.parse(localStorage.getItem("songs")) || []
+added_songs.forEach(song => new Song(song.album, song.year, song.artist, song.title))
+
+function toggleSongBox() {
+    add_song_box.classList.toggle("no-transform")
+}
+
+function addSongInstance() {
+    let title = document.getElementById("song-title").value
+    let artist = document.getElementById("song-artist").value
+    let album = document.getElementById("song-album").value
+    let year = parseInt(document.getElementById("song-year").value)
+
+    added_songs.push(new Song(album, year, artist, title))
+    toggleSongBox()
+    localStorage.setItem("songs", JSON.stringify(added_songs))
+}
+</script>
+</html>
