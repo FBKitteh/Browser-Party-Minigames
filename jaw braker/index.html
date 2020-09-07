@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jaw Breaker</title>
+    <style>
+
+    
+h2 {
+    text-align: center;
+}
+
+#board {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    width: 80vw;
+    max-width: 40em;
+    margin: auto;
+    padding: 6em;
+    background-color: #eee;
+    border-radius: .5em;
+
+    transform: rotateX(180deg);
+}
+
+#board > div > div {
+    height: 8vw;
+    max-width: 4em;
+    max-height: 4em;
+    width: 8vw;
+    border-radius: 8vw;
+    background-color: #09f;
+}
+
+#score {
+    position: absolute;
+    right: 0;
+    top: -1.75em;
+    background: lavender;
+    border-radius: 2em;
+    padding: 1em 2em;
+}
+    </style>
+</head>
+<body>
+    <div style="position: relative;">
+        <h2>Jaw Breaker</h2>
+        <p id="score">Score: 0</p>
+    </div>
+
+    <div id="board">
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+    </div>
+    
+</body>
+<script>
+const bored = document.getElementById("board")
+const plops = getLeDivs()
+const score = {
+    value: 0,
+    bank: 0,
+    element: document.getElementById("score"),
+    add(amount) {
+        this.bank = 0
+        this.value += amount
+        this.element.innerHTML = `Score ${this.value}`
+    },
+    check(div = document.createElement("div"), n_or_p, first = false) {
+        const color = div.style.backgroundColor
+        const next = div.nextElementSibling
+        const prev = div.previousElementSibling
+        
+        div.parentElement.removeChild(div)
+        this.bank++
+
+        if(next && next.style.backgroundColor === color)
+            if(first || n_or_p === true) this.check(next, true)
+        if(prev && prev.style.backgroundColor === color)
+            if(first || n_or_p === false) this.check(prev, false)
+        
+        if(first) this.add(Math.pow(2, this.bank))
+    }
+}
+
+
+for (let i = 0; i < 100; i++) createDiv(plops.item(i % 10))
+
+
+
+plops.forEach(div => {
+    
+})
+
+function getEvDiv(ev) {
+    let div = document.createElement("div")
+    div = ev.srcElement
+    return div
+}
+
+function getLeDivs() {
+    let divs = document.querySelectorAll("div")
+    divs = document.querySelectorAll("#board > div")
+    return divs
+}
+
+function createDiv(column = document.createElement("div")) {
+    const div = document.createElement("div")
+    column.appendChild(div)
+    div.style.backgroundColor = randomColor()
+    
+    div.onclick = (ev) => 
+        score.check(div, undefined, true)
+    
+}
+
+function randomColor() {
+    const colorNames = ["green", "red", "orange", "dodgerblue", "rebeccapurple"]
+    const rand = Math.random() * colorNames.length >> 0
+    return colorNames[rand]
+}
+</script>
+</html>
